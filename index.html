@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title class="static">E-Bill by Sandy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAgICAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAEAAAEAEAABABAAEAEAAAAQAQAQEAARAAEBABAQAREQAQEAEBABERABAQAQEAEREAEBAAERERERERAAEAEREREQAQAQEBARAQEBABARAAAAEQEAAQEAAAAQEAAAEBAAAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADv9wAA29sAALftAACudQAArDUAAKw1AACsNQAAwAMAALANAACqVQAAp+UAANfrAADr1wAA//8AAP//AAD//wAA" rel="icon" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit:ital,wght@0,200;0,400;0,800;1,100&family=Montserrat:wght@100;400;500;800&display=swap" rel="stylesheet">
+    <style>
+        h2 {
+            text-align: center;
+            font-weight: 800;
+            color: rgb(250, 217, 0);
+        }
+        .static {
+            position: static;
+        }
+        body {
+            background-image: url(https://img.freepik.com/premium-vector/home-electricity-meter-counts-energy_124715-2360.jpg?w=2000);
+            background-size: 414px 350px;
+            background-repeat: no-repeat;
+            background-position: 0px 320px;
+            margin-top: 20px;
+            font-family: 'Montserrat', sans-serif;
+            
+        }
+        p {
+            font-weight: 500;
+        }
+        .foot {
+            font-weight: 400;
+            position: absolute;
+            top: 860px;
+            left: 125px
+        }
+        .btn {
+            margin:8px;
+            position: relative;
+            left: 135px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>E-Bill Generator</h2>
+        <p>This site will help you to know the usage of electricity and also shows Units consumed, price to be paid and the number of units remaining to break free awarded units.</p>
+        <form name="myForm">
+            <div class="form-group">
+                <label for="oldRead">Old Reading :</label>
+                <input type="text" class="form-control" name="oldRead" id="oldRead">
+            </div>
+            <div class="form-group">
+                <label for="newRead">Ongoing Reading :</label>
+                <input type="text" class="form-control" name="newRead" id="newRead">
+            </div>
+            <div class="form-group">
+                <label for="rewardedUnit">Rewarded Unit :</label>
+                <input type="text" class="form-control" name="rewardedUnit" id="rewardedUnit">
+            </div>
+            <button type="button" class="btn btn-warning" onclick="calculation()">Calculate</button>
+        </form>
+    </div>
+    <footer><p class="foot">Made By Sandeep R</p></footer>
+
+    <!-- JavaScript code  -->
+<script type="text/javascript">
+        function calculation() {
+            var dPrice = 7; //dPrice is default price charged per unit
+            var dPrice2 = 2.05; //dPrice2 is default price charged per unit as a Tax1
+            var fPrice = 110; //fPrice is fixed price for fixed tax0
+            var fUnit = 2.0; //fUnit is fixed unit for fixed tax0
+            var taxP=9; //tax Percent
+            var taxPercent = taxP / 100;
+            var interest=10;
+
+            var oldReading = parseFloat(document.myForm.oldRead.value); //old reading mentioned in bill
+            var newReading = parseFloat(document.myForm.newRead.value); //new reading mentioned in bill
+            var cUnit = newReading - oldReading; //RunningUsageUnit
+
+            var fAmnt = fUnit * fPrice; //fAmnt is default amount must be paid (tax1)
+            var cUsage = dPrice * cUnit; //cUsage is original amount to be paid based on our usage
+            var Tax1 = dPrice2 * cUnit; //Tax1 is FPPA tax bescom
+            var Tax2 = cUsage * taxPercent; // Tax2 (Final)
+            var Total1 = fAmnt + cUsage + Tax1 + Tax2; //Usage Total
+
+            var rUnit = parseFloat(document.myForm.rewardedUnit.value);
+            var rAmnt = fUnit * fPrice; //fAmnt is default amount must be paid (tax1)
+            var rUsage = dPrice * rUnit; //cUsage is original amount to be paid based on our usage
+            var rTax1 = dPrice2 * rUnit; //Tax1 is FPPA tax bescom
+            var rTax2 = rUsage * taxPercent; // Tax2 (Final)
+            var Total2 = rAmnt + rUsage + rTax1 + rTax2; // Rewarded Total
+
+            var fTotal = Total1 - Total2 + interest; //Final Amount to be paid extra
+
+            var Amount;
+
+            if (fTotal <= 0) {
+                Amount = 0;
+            } else {
+                Amount = Math.ceil(fTotal);
+            }
+
+            document.write("<body>");
+            document.writeln('<form name="myForm2">');
+            document.writeln('<table border="2">');
+            document.writeln("<tr><th colspan=2>Running E-Bill</th></tr>");
+            document.writeln("<tr><td>Old Reading:</th><td>" + oldReading + "</td></tr>");
+            document.writeln("<tr><td>New Reading:</td><td>" + newReading + "</td></tr>");
+            document.writeln("<tr><td>Units Consumed:</td><td>" + cUnit + "</td></tr>");
+            document.writeln("<tr><td>Usage Amount:</td><td>" + Math.round(Total1) + "</td></tr>");
+            document.writeln("<tr><td>Units Rewarded:</td><td>" + rUnit + "</td></tr>");
+            document.writeln("<tr><td>Rewarded Amount:</td><td>" + Math.round(Total2)+ "</td></tr>");
+            document.writeln("<tr><td>Amount to be paid as of now:</td><td>" + Amount + "</td></tr>");
+            document.writeln('<tr><td colspan="2"><button type="button" class="btn btn-secondary" onclick="location.reload()">Go Back</button></td></tr>');
+            document.writeln("</table>");
+            document.writeln('</form>');
+            document.write("</body>");
+
+            if (Amount == 0) {
+
+            document.write("<body>");
+            document.writeln("<table>");
+            document.writeln("<tr><td><pre>Free Amount available:     </pre></td><td>" + Math.abs(fTotal) + "</td></tr>");
+            document.writeln("</table>");
+            document.write("</body>");
+                
+            }
+
+            
+
+            // .toPrecision(2) can also be used in code(idea)
+        }
+    </script>
+
+
+</body>
+</html>
+
+
+<!-- location.reload(); used to reload page-->
+<!-- https://img.freepik.com/premium-vector/home-electricity-meter-counts-energy_124715-2360.jpg?w=2000 -->
+<!-- 
+font-family: 'Bebas Neue', sans-serif;
+font-family: 'Kanit', sans-serif;
+font-family: 'Montserrat', sans-serif; 
+weight=100,400,500,800-->
+
+<!-- document.writeln('<div class="advance">');
+    document.writeln('<form name="myForm2">');
+    document.writeln('<table>');
+    document.writeln('<tr>');
+    document.writeln('<td>');
+    document.writeln('Default price charged per unit');
+    document.writeln('</td>');
+    document.writeln('<td>');
+    document.writeln('<input type="text" value=""');
+    document.writeln('</td>');
+    document.writeln('</tr>');
+    document.writeln('</table>');
+    document.writeln('</form>');
+    document.writeln('</div>'); -->
+
